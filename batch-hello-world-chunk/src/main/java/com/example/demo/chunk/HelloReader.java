@@ -1,6 +1,9 @@
 package com.example.demo.chunk;
 
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
@@ -17,6 +20,21 @@ public class HelloReader implements ItemReader<String> {
 	// 出力文字列
 	private String[] input = { "Hello", "World", "hoge", "fuga", null, "The World" };
 	private int index = 0;
+	
+	@BeforeStep
+	public void boforeStep(StepExecution stepExecution) {
+		log.info("HelloReader @BeforeStep");
+		// JobExecutionContextの取得
+		ExecutionContext jobContext = stepExecution.getJobExecution()
+				.getExecutionContext();
+		// Mapに値登録
+		jobContext.put("jobKey", "jobValue");
+		
+		// StepExecutionContextの取得
+		ExecutionContext stepContext = stepExecution.getExecutionContext();
+		//Mapに値登録
+		stepContext.put("stepKey", "stepValue");
+	}
 	
 	@Override
 	public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {

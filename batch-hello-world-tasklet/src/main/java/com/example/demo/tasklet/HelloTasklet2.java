@@ -4,33 +4,32 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @StepScope
-@Component("HelloTasklet")
-public class HelloTasklet implements Tasklet {
-
+@Component("HelloTasklet2")
+public class HelloTasklet2 implements Tasklet {
+	
+	@Value("#{JobExecutionContext['jobKey']}")
+	private String jobValue;
+	
+	@Value("#{StepExecutionContext['stepKey']}")
+	private String stepValue;
+	
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-		log.info("Hello World");
+		log.info("Hello World2");
 		
-		// JobExecutionContextの取得
-		ExecutionContext jobContext = contribution.getStepExecution()
-				.getJobExecution()
-				.getExecutionContext();
-		// Mapに値登録
-		jobContext.put("jobKey", "jobValue");
+		// JobExecutionContextから値を取得
+		log.info("jobKey={}", jobValue);
 		
-		// StepExecutionContextの取得
-		ExecutionContext stepContext = contribution.getStepExecution()
-				.getExecutionContext();
-		// Mapに値登録
-		stepContext.put("stepKey", "stepValue");
+		// StepExecutionContextから値を取得
+		log.info("stepKey={}", stepValue);
 		
 		return RepeatStatus.FINISHED;
 	}
