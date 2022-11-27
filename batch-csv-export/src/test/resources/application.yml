@@ -1,16 +1,16 @@
 spring:
   batch:
     job:
-      names: ExportParallelJob
+      names: ExportJdbcCursorJob
     jdbc:
       initialize-schema: always
-      schema: classpath:org/springframework/batch/core/schema-postgresql.sql
+      schema: classpath:org/springframework/batch/core/schema-h2.sql
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/batch
-    username: study
-    password: 1234
-    
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: password
+
 logging:
   level:
     '[com.example.demo]': debug

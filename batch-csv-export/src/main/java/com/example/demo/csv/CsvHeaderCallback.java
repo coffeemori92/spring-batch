@@ -13,6 +13,6 @@ public class CsvHeaderCallback implements FlatFileHeaderCallback {
 
 	@Override
 	public void writeHeader(Writer writer) throws IOException {
-		writer.write("ID, 名前, 年齢, 性別");
+		writer.write("ID,名前,年齢,性別");
 	}
 }
